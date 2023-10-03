@@ -1,3 +1,11 @@
+# Definition for singly-linked list.
+from typing import Optional
+
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 
 class Solution:
@@ -109,3 +117,49 @@ class Solution:
             if colors[i] == colors[i - 1] == colors[i + 1]:
                 dict_win[colors[i]] += 1
         return dict_win['A'] > dict_win['B']
+
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        You are given two non-empty linked lists representing two non-negative integers.
+         The digits are stored in reverse order, and each of their nodes contains a single digit.
+          Add the two numbers and return the sum as a linked list.
+        You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+        :param l1: first node of linked right list
+        :param l2: first node of linked right list
+        :return:
+        """
+        zero_node = ListNode()
+        l_result = ListNode(val=l1.val + l2.val)
+        first_node = l_result
+        while l1.next or l2.next:
+            l1 = l1.next if l1.next is not None else zero_node
+            l2 = l2.next if l2.next is not None else zero_node
+            if l_result.val < 10:
+                val = 0
+            else:
+                val = 1
+                l_result.val -= 10
+            l_result.next = ListNode(l1.val + l2.val + val)
+            l_result = l_result.next
+        if l_result.val >= 10:
+            l_result.val -= 10
+            l_result.next = ListNode(val=1)
+        return first_node
+
+    def numIdenticalPairs(self, nums: list[int]) -> int:
+        """
+        Given an array of integers nums, return the number of good pairs.
+        A pair (i, j) is called good if nums[i] == nums[j] and i < j.
+        [1,2,3,1,1,3] -> 4; [1,1,1,1] -> 6
+        :param nums:
+        :return:
+        """
+        result = 0
+        dict_nums = {}
+        for i in nums:
+            if i in dict_nums:
+                dict_nums[i] += 1
+                result += dict_nums[i]
+            else:
+                dict_nums[i] = 0
+        return result

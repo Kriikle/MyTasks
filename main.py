@@ -28,8 +28,10 @@ if __name__ == '__main__':
     # assert solutionObj.isMonotonic([6,5,4,4]) is True, 'must be True'
     # assert solutionObj.isMonotonic([1,3,2]) is False, 'must be False'
 
-    assert solutionObj.winnerOfGame("AAABABB") is True, 'must be true'
-    assert solutionObj.winnerOfGame("AA") is False, 'must be False'
-    assert solutionObj.winnerOfGame("ABBBBBBBAAA") is False, 'must be False'
+    # assert solutionObj.winnerOfGame("AAABABB") is True, 'must be true'
+    # assert solutionObj.winnerOfGame("AA") is False, 'must be False'
+    # assert solutionObj.winnerOfGame("ABBBBBBBAAA") is False, 'must be False'
+
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
