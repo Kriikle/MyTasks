@@ -163,3 +163,18 @@ class Solution:
             else:
                 dict_nums[i] = 0
         return result
+
+    def integerBreak(self, n: int) -> int:
+        """
+        Given an integer n, break it into the sum of k positive integers, where k >= 2,
+         and maximize the product of those integers.
+        :param n: 2 <= n <= 58
+        :return: int
+        """
+        if n == 2 or n == 3:
+            return n - 1
+        result = 1
+        while n > 4:
+            n -= 3
+            result *= 3
+        return result * n

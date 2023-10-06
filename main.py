@@ -32,6 +32,9 @@ if __name__ == '__main__':
     # assert solutionObj.winnerOfGame("AA") is False, 'must be False'
     # assert solutionObj.winnerOfGame("ABBBBBBBAAA") is False, 'must be False'
 
+    assert solutionObj.integerBreak(2) == 1, 'must be 1'
+    assert solutionObj.integerBreak(10) == 36, 'must be 36'
+
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
