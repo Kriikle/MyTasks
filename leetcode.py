@@ -178,3 +178,18 @@ class Solution:
             n -= 3
             result *= 3
         return result * n
+
+    def majorityElement(self, nums: list[int]) -> list[int]:
+        """
+        Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
+        :param nums: 1 <= nums.length <= 5 * 10**4; -10**9 <= nums[i] <= 10**9
+        :return:
+        """
+        n = len(nums)
+        result = set()
+        dict_of_nums = {x: 0 for x in set(nums)}
+        for i in nums:
+            dict_of_nums[i] += 1
+            if dict_of_nums[i] > n / 3:
+                result.add(i)
+        return list(result)
