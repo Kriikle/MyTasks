@@ -1,5 +1,7 @@
 # Definition for singly-linked list.
+from functools import cache
 from typing import Optional
+import collections
 
 
 class ListNode:
@@ -7,6 +9,11 @@ class ListNode:
         self.val = val
         self.next = next
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
@@ -193,3 +200,104 @@ class Solution:
             if dict_of_nums[i] > n / 3:
                 result.add(i)
         return list(result)
+
+
+    def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
+        """
+        You are given the root of a binary tree with unique values, and an integer start.
+        At minute 0, an infection starts from the node with value start.
+        Each minute, a node becomes infected if:
+            The node is currently uninfected.
+            The node is adjacent to an infected node.
+            Return the number of minutes needed for the entire tree to be infected.
+        :param self:
+        :param root:
+        :param start:
+        :return:
+        """
+        self.nodes_stack = [[start,0,-1]]
+        self.roads_data = collections.defaultdict(lambda: [])
+        result = 0
+        def makeGraf(tree_root: TreeNode):
+            if tree_root.left:
+                self.roads_data[tree_root.val] += [tree_root.left.val]
+                self.roads_data[tree_root.left.val] += [tree_root.val]
+                makeGraf(tree_root.left)
+            if tree_root.right:
+                self.roads_data[tree_root.val] += [tree_root.right.val]
+                self.roads_data[tree_root.right.val] += [tree_root.val]
+                makeGraf(tree_root.right)
+            return 0
+        def findRoads(node):
+            # [node.val, time to find, prew_node]
+            for i in self.roads_data[node[0]]:
+                if i != node[2]:
+                    self.nodes_stack.append([i,node[1] + 1,node[0]])
+        makeGraf(root)
+        while len(self.nodes_stack) != 0:
+            iter_node = self.nodes_stack.pop()
+            findRoads(iter_node)
+            if iter_node[1] > result:
+                result = iter_node[1]
+        return result
+
+
+    mod = (10**9+7)
+    def numRollsToTarget(self, n: int, k: int, target: int) -> int:
+        """
+        You have n dice, and each dice has k faces numbered from 1 to k.
+        Given three integers n, k, and target, return the number of possible ways
+        (out of the kn total ways) to roll the dice, so the sum of the face-up numbers equals
+        target. Since the answer may be too large,
+        return it modulo 109 + 7.
+        :param n:
+        :param k:
+        :param target:
+        :return:
+        """
+        @cache
+        def counter(target:int, n: int):
+            res = 0
+            if n == 0 and target != 0:
+                return 0
+            if target > 0 and n > 0:
+                for i in range(1,k+1):
+                    res += counter(target - i,n - 1)
+            elif target == 0 and n == 0:
+                return 1
+            else:
+                return 0
+            return res
+
+        return counter(target,n) % self.mod
+
+    def numDecodings(self, s: str) -> int:
+        """
+        A message containing letters from A-Z can be encoded into numbers using the following mapping:
+
+        'A' -> "1"
+        'B' -> "2"
+        ...
+        'Z' -> "26"
+        To decode an encoded message, all the digits must be grouped then mapped back
+         into letters using the reverse of the mapping above (there may be multiple ways).
+          For example, "11106" can be mapped into:
+            "AAJF" with the grouping (1 1 10 6)
+            "KJF" with the grouping (11 10 6)
+        Note that the grouping (1 11 06) is invalid because "06" cannot be mapped into 'F' since "6" is different from "06".
+        Given a string s containing only digits, return the number of ways to decode it.
+        The test cases are generated so that the answer fits in a 32-bit integer.
+        :param s:
+        :return:
+        """
+        curr, oneback, twoback = 0, 1, 1
+        for i in range(len(s) - 1, -1, -1):
+            if s[i] == '0':
+                curr = 0
+            else:
+                curr = oneback
+                if i + 1 < len(s) and int(s[i] + s[i + 1]) <= 26:
+                    curr += twoback
+            twoback = oneback
+            oneback = curr
+        return curr
